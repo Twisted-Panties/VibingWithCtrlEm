@@ -1,0 +1,394 @@
+<Window x:Class="VibingWithCtrlEm.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:VibingWithCtrlEm.Converters"
+        mc:Ignorable="d"
+        Title="Vibing With CtrlEm"
+        Width="1000" Height="582"
+        MinWidth="700" MinHeight="520"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource BackgroundBrush}"
+        ResizeMode="CanResize">
+
+    <Window.Resources>
+        <converters:MsToSecondsConverter x:Key="MsToSeconds"/>
+    </Window.Resources>
+
+    <!-- Theme resources are in App.xaml — no local ResourceDictionary needed.
+         All bindings use DynamicResource so they react to runtime theme swaps. -->
+
+    <!-- Root layout: three stacked zones -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Top: Title / Header -->
+            <RowDefinition Height="Auto"/>
+            <!-- Middle: Three panels -->
+            <RowDefinition Height="*"/>
+            <!-- Bottom: Status / Controls -->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ═══════════════════════════════════════════════
+             TOP — Title Banner
+             ═══════════════════════════════════════════════ -->
+        <Border Grid.Row="0"
+                Background="{DynamicResource HeaderBrush}"
+                BorderBrush="{DynamicResource HeaderBorderBrush}"
+                BorderThickness="0,0,0,1"
+                Padding="20,14">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- App title + description -->
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock Text="Vibing With CtrlEm"
+                               Style="{DynamicResource AppTitleStyle}"/>
+                </StackPanel>
+
+                <!-- Right side: theme toggle + tray hint -->
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center">
+
+                    <!-- Theme toggle button -->
+                    <Button x:Name="BtnToggleTheme"
+                            Content="🌙  Dark Mode"
+                            Style="{DynamicResource ThemeToggleButtonStyle}"
+                            Click="BtnToggleTheme_Click"
+                            ToolTip="Switch between dark and light themes"/>
+
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ═══════════════════════════════════════════════
+             MIDDLE — Three Panels
+             ═══════════════════════════════════════════════ -->
+        <Grid Grid.Row="1" Margin="12,12,12,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="230"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="420"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ─────────────────────────────
+                 LEFT — Intiface Connection
+                 ───────────────────────────── -->
+            <Border Grid.Column="0"
+                    Style="{DynamicResource PanelBorderStyle}">
+                <StackPanel>
+                    <TextBlock Text="INTIFACE CONNECTION"
+                               Style="{DynamicResource PanelHeaderStyle}"/>
+
+                    <Separator Style="{DynamicResource PanelSeparatorStyle}"/>
+
+                    <!-- URL label + field -->
+                    <TextBlock Text="Server URL"
+                               Style="{DynamicResource FieldLabelStyle}"/>
+                    <TextBox x:Name="TxtIntifaceUrl"
+                             Style="{DynamicResource InputTextBoxStyle}"
+                             LostFocus="TxtIntifaceUrl_LostFocus"
+                             ToolTip="WebSocket URL of your Intiface Central / Intiface Engine instance"/>
+
+                    <!-- Status indicator -->
+                    <Grid Margin="0,12,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Ellipse x:Name="EllipseStatus"
+                                 Grid.Column="0"
+                                 Width="11" Height="11"
+                                 Fill="{DynamicResource StatusDisconnectedBrush}"
+                                 VerticalAlignment="Center"
+                                 Margin="0,0,7,0"/>
+                        <TextBlock x:Name="TxtConnectionStatus"
+                                   Grid.Column="1"
+                                   Text="Disconnected"
+                                   Style="{DynamicResource StatusTextStyle}"/>
+                    </Grid>
+
+                    <!-- Connect / Disconnect buttons -->
+                    <Button x:Name="BtnConnect"
+                            Content="Connect"
+                            Style="{DynamicResource PrimaryButtonStyle}"
+                            Margin="0,16,0,4"
+                            Click="BtnConnect_Click"/>
+
+                    <Button x:Name="BtnDisconnect"
+                            Content="Disconnect"
+                            Style="{DynamicResource SecondaryButtonStyle}"
+                            IsEnabled="False"
+                            Click="BtnDisconnect_Click"/>
+
+                    <!-- Connected device -->
+                    <TextBlock Text="Device"
+                               Style="{DynamicResource FieldLabelStyle}"
+                               Margin="0,10,0,2"/>
+                    <ComboBox x:Name="CmbDevices"
+                              Style="{DynamicResource DeviceComboStyle}"
+                              IsEnabled="False"
+                              ToolTip="Available devices will appear here after connecting"/>
+                    <TextBlock Text="Connect first to discover devices"
+                               Style="{DynamicResource HintTextStyle}"/>
+
+                    <!-- Test pulse button -->
+                    <Button x:Name="BtnTestDevice"
+                            Content="Test Device"
+                            Style="{DynamicResource OutlineButtonStyle}"
+                            IsEnabled="False"
+                            Margin="0,10,0,0"
+                            Click="BtnTestDevice_Click"
+                            ToolTip="Send a brief test pulse to the selected device"/>
+                </StackPanel>
+            </Border>
+
+            <!-- ─────────────────────────────
+                 MIDDLE — Log File
+                 ───────────────────────────── -->
+            <Border Grid.Column="2"
+                    Style="{DynamicResource PanelBorderStyle}">
+                <StackPanel>
+                    <TextBlock Text="LOG FILE"
+                               Style="{DynamicResource PanelHeaderStyle}"/>
+
+                    <Separator Style="{DynamicResource PanelSeparatorStyle}"/>
+
+                    <!-- Log folder path -->
+                    <TextBlock Text="Log Folder"
+                               Style="{DynamicResource FieldLabelStyle}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TxtLogFolder"
+                                 Grid.Column="0"
+                                 Style="{DynamicResource InputTextBoxStyle}"
+                                 IsReadOnly="True"
+                                 ToolTip="Folder to watch for log files"/>
+                        <Button x:Name="BtnBrowseFolder"
+                                Grid.Column="1"
+                                Content="…"
+                                Style="{DynamicResource BrowseButtonStyle}"
+                                Margin="4,0,0,0"
+                                Click="BtnBrowseFolder_Click"
+                                ToolTip="Browse for log folder"/>
+                    </Grid>
+
+                    <!-- Current log file -->
+                    <TextBlock Text="Active Log File"
+                               Style="{DynamicResource FieldLabelStyle}"
+                               Margin="0,12,0,2"/>
+                    <Border Style="{DynamicResource ReadonlyFieldBorderStyle}">
+                        <TextBlock x:Name="TxtCurrentLogFile"
+                                   Text=""
+                                   Style="{DynamicResource ReadonlyValueStyle}"
+                                   TextTrimming="CharacterEllipsis"
+                                   ToolTip="{Binding Text, ElementName=TxtCurrentLogFile}"/>
+                    </Border>
+                    <TextBlock Text="Most recently modified file in the folder"
+                               Style="{DynamicResource HintTextStyle}"/>
+
+                    <!-- Log file stats -->
+                    <TextBlock Text="Statistics"
+                               Style="{DynamicResource FieldLabelStyle}"
+                               Margin="0,14,0,4"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0"
+                                   Text="Commands Executed"
+                                   Style="{DynamicResource StatLabelStyle}"/>
+                        <TextBlock x:Name="TxtLinesMatched"
+                                   Grid.Row="0" Grid.Column="1"
+                                   Text="0"
+                                   Style="{DynamicResource StatValueStyle}"/>
+                    </Grid>
+
+                    <!-- Running command -->
+                    <TextBlock Text="Last Command"
+                               Style="{DynamicResource FieldLabelStyle}"
+                               Margin="0,14,0,4"/>
+                    <Border Style="{DynamicResource LastCommandBorderStyle}">
+                        <TextBlock x:Name="TxtLastCommand"
+                                   Text="— none —"
+                                   Style="{DynamicResource LastCommandTextStyle}"
+                                   TextWrapping="Wrap"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- ─────────────────────────────
+                 RIGHT — Command List
+                 ───────────────────────────── -->
+            <Border Grid.Column="4"
+                    Style="{DynamicResource PanelBorderStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Text="COMMAND MAPPINGS"
+                               Style="{DynamicResource PanelHeaderStyle}"/>
+
+                    <Separator Grid.Row="1"
+                               Style="{DynamicResource PanelSeparatorStyle}"/>
+
+                    <!-- Scrollable command list — headers are owned by GridView columns
+                         so they always align perfectly with cell data. -->
+                    <ListView x:Name="LvCommands"
+                              Grid.Row="2"
+                              Style="{DynamicResource CommandListViewStyle}"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem"
+                                   BasedOn="{StaticResource CommandListItemStyle}"/>
+                        </ListView.ItemContainerStyle>
+                        <ListView.View>
+                            <GridView ColumnHeaderContainerStyle="{DynamicResource CommandListHeaderStyle}">
+
+                                <!-- Keyword -->
+                                <GridViewColumn Width="120" Header="Keyword">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Keyword}"
+                                                       Style="{DynamicResource KeywordCellStyle}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <!-- Intensity — header centered to match cell text -->
+                                <GridViewColumn Width="70" Header="Intensity">
+                                    <GridViewColumn.HeaderContainerStyle>
+                                        <Style TargetType="GridViewColumnHeader"
+                                               BasedOn="{StaticResource CommandListHeaderStyle}">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                        </Style>
+                                    </GridViewColumn.HeaderContainerStyle>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Intensity, StringFormat={}{0:P0}}"
+                                                       TextAlignment="Center"
+                                                       Style="{DynamicResource IntensityCellStyle}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <!-- Duration (seconds) — header centered to match cell text -->
+                                <GridViewColumn Width="55" Header="Duration">
+                                    <GridViewColumn.HeaderContainerStyle>
+                                        <Style TargetType="GridViewColumnHeader"
+                                               BasedOn="{StaticResource CommandListHeaderStyle}">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                        </Style>
+                                    </GridViewColumn.HeaderContainerStyle>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding DurationMs, Converter={StaticResource MsToSeconds}}"
+                                                       TextAlignment="Center"
+                                                       Style="{DynamicResource DurationCellStyle}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <!-- Add-command hint -->
+                    <TextBlock Grid.Row="3"
+                               Text="Commands are loaded from config.json"
+                               Style="{DynamicResource HintTextStyle}"
+                               Margin="0,6,0,0"/>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- ═══════════════════════════════════════════════
+             BOTTOM — Controls + Status Bar
+             ═══════════════════════════════════════════════ -->
+        <Border Grid.Row="2"
+                Background="{DynamicResource FooterBrush}"
+                BorderBrush="{DynamicResource HeaderBorderBrush}"
+                BorderThickness="0,1,0,0"
+                Padding="12,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Start button -->
+                <Button x:Name="BtnStart"
+                        Grid.Column="0"
+                        Content="▶  Start"
+                        Style="{DynamicResource StartButtonStyle}"
+                        IsEnabled="False"
+                        Width="100"
+                        Click="BtnStart_Click"
+                        ToolTip="Begin watching log and sending haptic commands"/>
+
+                <!-- Stop button -->
+                <Button x:Name="BtnStop"
+                        Grid.Column="1"
+                        Content="■  Stop"
+                        Style="{DynamicResource StopButtonStyle}"
+                        IsEnabled="False"
+                        Width="100"
+                        Margin="8,0,0,0"
+                        Click="BtnStop_Click"
+                        ToolTip="Stop sending haptic commands immediately"/>
+
+                <!-- Exit button -->
+                <Button x:Name="BtnExit"
+                        Grid.Column="2"
+                        Content="Exit"
+                        Style="{DynamicResource SecondaryButtonStyle}"
+                        Width="80"
+                        Margin="8,0,0,0"
+                        Click="BtnExit_Click"
+                        ToolTip="Close application completely"/>
+
+                <!-- Status message area -->
+                <StackPanel Grid.Column="3"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            Margin="16,0,0,0">
+                    <Ellipse x:Name="EllipseRunStatus"
+                             Width="8" Height="8"
+                             Fill="{DynamicResource StatusIdleBrush}"
+                             VerticalAlignment="Center"
+                             Margin="0,0,6,0"/>
+                    <TextBlock x:Name="TxtStatusMessage"
+                               Text="Idle — connect to Intiface and press Start"
+                               Style="{DynamicResource StatusMessageStyle}"/>
+                </StackPanel>
+
+                <!-- Version label -->
+                <TextBlock Grid.Column="4"
+                           Text="v0.9.0"
+                           Style="{DynamicResource VersionLabelStyle}"
+                           VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

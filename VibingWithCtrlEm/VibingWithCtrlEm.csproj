@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>VibingWithCtrlEm</RootNamespace>
+    <AssemblyName>VibingWithCtrlEm</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <!-- Embeds the ICO as the Windows exe/taskbar icon -->
+    <ApplicationIcon>$(MSBuildProjectDirectory)\Assets\app-icon.ico</ApplicationIcon>
+    <!-- Default Publish Settings for Visual Studio & CLI -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSelfContained>true</PublishSelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <EnableCompressionInSingleFile>false</EnableCompressionInSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- PNG available at runtime for window titlebar + system tray -->
+    <Resource Include="Assets\app-icon.png" />
+    <!-- ICO must also be a Resource so WPF can load it for Window.Icon -->
+    <Resource Include="Assets\app-icon.ico" />
+    <None Update="config.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Buttplug" Version="4.0.0" />
+    <PackageReference Include="Buttplug.Client.Connectors.WebsocketConnector" Version="3.0.1" />
+  </ItemGroup>
+
+  <!-- Post-build target to inject RT_GROUP_ICON ID 1 (MAINICON) for Windows Explorer.
+       Runs after Build only — NOT after Publish.
+       BeginUpdateResource/EndUpdateResource rewrites the PE file which strips the .NET
+       single-file bundle trailer, producing a broken ~10 MB stub.
+       The SDK already injects <ApplicationIcon> into the publish apphost automatically. -->
+  <Target Name="InjectWin32MainIcon" AfterTargets="Build" Condition="'$(OS)' == 'Windows_NT' AND '$(PublishSingleFile)' != 'true'">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -Command &quot;&amp; { $exe = '$(PublishDir)VibingWithCtrlEm.exe'; if (-not (Test-Path $exe)) { $exe = '$(TargetDir)VibingWithCtrlEm.exe' }; if (Test-Path $exe) { Add-Type -TypeDefinition 'using System; using System.IO; using System.Runtime.InteropServices; public class IconFixer { [DllImport(\&quot;kernel32.dll\&quot;, SetLastError=true)] public static extern IntPtr BeginUpdateResource(string f, bool d); [DllImport(\&quot;kernel32.dll\&quot;, SetLastError=true)] public static extern bool UpdateResource(IntPtr h, IntPtr t, IntPtr n, ushort l, byte[] d, uint s); [DllImport(\&quot;kernel32.dll\&quot;, SetLastError=true)] public static extern bool EndUpdateResource(IntPtr h, bool d); public static void Fix(string exe, string ico) { byte[] b = File.ReadAllBytes(ico); ushort c = BitConverter.ToUInt16(b, 4); IntPtr h = BeginUpdateResource(exe, false); if (h == IntPtr.Zero) return; byte[] g = new byte[6 + c * 14]; Array.Copy(b, 0, g, 0, 6); for (ushort i = 0; i &lt; c; i++) { int io = 6 + i * 16, go = 6 + i * 14; Array.Copy(b, io, g, go, 12); ushort id = (ushort)(i + 1); byte[] idb = BitConverter.GetBytes(id); g[go + 12] = idb[0]; g[go + 13] = idb[1]; uint sz = BitConverter.ToUInt32(b, io + 8), off = BitConverter.ToUInt32(b, io + 12); byte[] img = new byte[sz]; Array.Copy(b, (int)off, img, 0, (int)sz); UpdateResource(h, (IntPtr)3, (IntPtr)id, 0, img, sz); } UpdateResource(h, (IntPtr)14, (IntPtr)1, 0, g, (uint)g.Length); UpdateResource(h, (IntPtr)14, (IntPtr)32512, 0, g, (uint)g.Length); EndUpdateResource(h, false); } }'; [IconFixer]::Fix($exe, '$(MSBuildProjectDirectory)\Assets\app-icon.ico') } }&quot;" />
+  </Target>
+
+</Project>

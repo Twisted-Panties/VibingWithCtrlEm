@@ -1,0 +1,15 @@
+# Build output
+VibingWithCtrlEm/bin/
+VibingWithCtrlEm/obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.userprefs
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store

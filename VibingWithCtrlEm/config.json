@@ -1,0 +1,71 @@
+{
+  "IntifaceUrl": "ws://127.0.0.1:12345",
+  "LogFolderPath": "%LOCALAPPDATA%\\Documents\\CtrlEm Client\\Logs",
+  "Commands": [
+    {
+      "Keyword": "changeWallpaper",
+      "Intensity": 0.5,
+      "DurationMs": 750
+    },
+    {
+      "Keyword": "lockinput",
+      "Intensity": 0.9,
+      "DurationMs": 1000
+    },
+    {
+      "Keyword": "openPage",
+      "Intensity": 0.4,
+      "DurationMs": 500
+    },
+    {
+      "Keyword": "popupImage",
+      "Intensity": 0.75,
+      "DurationMs": 750
+    },
+    {
+      "Keyword": "popupSound",
+      "Intensity": 0.25,
+      "DurationMs": 500
+    },
+    {
+      "Keyword": "reactionTest",
+      "Intensity": 0.85,
+      "DurationMs": 2000
+    },
+    {
+      "Keyword": "screenBlank",
+      "Intensity": 0.7,
+      "DurationMs": 1000
+    },
+    {
+      "Keyword": "screenshot",
+      "Intensity": 0.9,
+      "DurationMs": 1250
+    },
+    {
+      "Keyword": "sendMessage",
+      "Intensity": 0.4,
+      "DurationMs": 500
+    },
+    {
+      "Keyword": "sendOrDelete",
+      "Intensity": 0.65,
+      "DurationMs": 800
+    },
+    {
+      "Keyword": "videoOverlay",
+      "Intensity": 0.25,
+      "DurationMs": 1500
+    },
+    {
+      "Keyword": "webcamCapture",
+      "Intensity": 1,
+      "DurationMs": 2500
+    },
+    {
+      "Keyword": "writeForMe",
+      "Intensity": 0.5,
+      "DurationMs": 1500
+    }
+  ]
+}
