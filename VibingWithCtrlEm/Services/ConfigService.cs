@@ -105,6 +105,8 @@ public static class ConfigService
                 new CommandMapping { Keyword = "changeWallpaper", Intensity = 0.50,  DurationMs = 750 },
                 new CommandMapping { Keyword = "lockinput",       Intensity = 0.90,  DurationMs = 1000 },
                 new CommandMapping { Keyword = "openPage",        Intensity = 0.40,  DurationMs = 500 },
+                new CommandMapping { Keyword = "openshock",       Intensity = 0.65,  DurationMs = 1000 },
+                new CommandMapping { Keyword = "pishock",         Intensity = 0.65,  DurationMs = 1000 },
                 new CommandMapping { Keyword = "popupImage",      Intensity = 0.75,  DurationMs = 750 },
                 new CommandMapping { Keyword = "popupSound",      Intensity = 0.25,  DurationMs = 500 },
                 new CommandMapping { Keyword = "reactionTest",    Intensity = 0.85,  DurationMs = 2000 },

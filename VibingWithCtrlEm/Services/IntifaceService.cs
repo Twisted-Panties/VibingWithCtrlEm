@@ -191,16 +191,25 @@ public class IntifaceService : IDisposable
         catch { }
     }
 
+    private const int MaxDurationMs = 10_000;
+
     private async Task ExecutePulseAsync(VibeCommand cmd)
     {
         if (_client is null || !IsConnected) return;
+
+        // Skip commands with no intensity or no duration — nothing useful to send.
+        if (cmd.Intensity <= 0.0 || cmd.DurationMs <= 0) return;
 
         var device = _client.Devices.FirstOrDefault(d =>
             d.Name.Equals(cmd.DeviceName, StringComparison.OrdinalIgnoreCase));
         if (device is null) return;
 
+        // Clamp duration to the configured maximum so a misconfigured entry
+        // cannot hold the device on indefinitely.
+        int durationMs = Math.Min(cmd.DurationMs, MaxDurationMs);
+
         // Notify the UI that this command is now actively running
-        try { CommandStarted?.Invoke(cmd.Keyword, cmd.DeviceName, cmd.Intensity, cmd.DurationMs); }
+        try { CommandStarted?.Invoke(cmd.Keyword, cmd.DeviceName, cmd.Intensity, durationMs); }
         catch { }
 
         // Capture the current pulse token before starting
@@ -208,12 +217,8 @@ public class IntifaceService : IDisposable
         try
         {
             await device.VibrateAsync(cmd.Intensity);
-
-            if (cmd.DurationMs > 0)
-            {
-                await Task.Delay(cmd.DurationMs, token);
-                await device.VibrateAsync(0.0);
-            }
+            await Task.Delay(durationMs, token);
+            await device.VibrateAsync(0.0);
         }
         catch (OperationCanceledException)
         {

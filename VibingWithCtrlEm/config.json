@@ -18,6 +18,16 @@
       "DurationMs": 500
     },
     {
+      "Keyword": "openshock",
+      "Intensity": 0.65,
+      "DurationMs": 1000
+    },
+    {
+      "Keyword": "pishock",
+      "Intensity": 0.65,
+      "DurationMs": 1000
+    },
+    {
       "Keyword": "popupImage",
       "Intensity": 0.75,
       "DurationMs": 750
