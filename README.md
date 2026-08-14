@@ -1,4 +1,4 @@
-# Vibing With CtrlEm
+﻿# Vibing With CtrlEm
 
 A Windows desktop application that watches a [CtrlEm](https://ctrlem.com/) activity log and translates logged events into haptic feedback commands sent to connected devices through [Intiface Central](https://intiface.com/central/).  
 
@@ -47,6 +47,7 @@ Key behaviours:
 | **Windows 10/11 x64** | Only supported platform currently |
 | **Intiface Central** (or Intiface Engine) | [Download here](https://intiface.com/central/) — must be running before connecting |
 | A Buttplug-compatible device | Paired and visible inside Intiface Central |
+| CtrlEm configured to make log files | See CtrlEm instructions |
 
 No additional .NET runtime is required — the release binary is fully self-contained.
 
@@ -142,7 +143,7 @@ Each entry in the `Commands` array maps a log keyword to a haptic response:
 |---|---|---|---|
 | `Keyword` | `string` | — | Word to match in a log line (case-insensitive, whole-word match) |
 | `Intensity` | `number` | `0.0` – `1.0` | Vibration strength (`0.0` = off, `1.0` = maximum) |
-| `DurationMs` | `integer` | milliseconds | How long to run the vibration |
+| `DurationMs` | `integer` | milliseconds | How long to run the vibration (`0` = skip the command) |
 
 Keyword matching uses a **whole-word, case-insensitive** search, so `screenshot` will match `[12:34] screenshot taken` but not `screenshots`.
 
@@ -157,6 +158,8 @@ The following mappings ship as defaults and reflect common CtrlEm event types:
 | `changeWallpaper` | 0.50 | 750 ms |
 | `lockinput` | 0.90 | 1000 ms |
 | `openPage` | 0.40 | 500 ms |
+| `openshock` | 0.65 | 1000 ms |
+| `pishock` | 0.65 | 1000 ms |
 | `popupImage` | 0.75 | 750 ms |
 | `popupSound` | 0.25 | 500 ms |
 | `reactionTest` | 0.85 | 2000 ms |
@@ -248,7 +251,6 @@ Vibing With CtrlEm operates entirely on your local machine:
 - The only network traffic is the local WebSocket connection to Intiface Central.
 
 ---
-
 ## Contact
 
 Questions, feedback, or just want to chat? Find me on Discord: **TwistedPanties**
