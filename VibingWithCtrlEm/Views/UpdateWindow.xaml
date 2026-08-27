@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Update Available — Vibing With CtrlEm"
-        Width="520" Height="430"
+        Width="640" Height="480"
         MinWidth="450" MinHeight="350"
         WindowStartupLocation="CenterOwner"
         Background="{DynamicResource BackgroundBrush}"
@@ -138,18 +138,14 @@
                     BorderBrush="{DynamicResource InputBorderBrush}"
                     BorderThickness="1"
                     CornerRadius="4"
-                    Padding="10">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                    <TextBox x:Name="TxtChangelog"
-                             IsReadOnly="True"
-                             TextWrapping="Wrap"
-                             Background="Transparent"
-                             Foreground="{DynamicResource PrimaryTextBrush}"
-                             BorderThickness="0"
-                             FontFamily="Segoe UI"
-                             FontSize="12"
-                             Padding="0"/>
-                </ScrollViewer>
+                    Padding="12,8">
+                <FlowDocumentScrollViewer x:Name="ViewerChangelog"
+                                          IsToolBarVisible="False"
+                                          VerticalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="Disabled"
+                                          Background="Transparent"
+                                          BorderThickness="0"
+                                          Focusable="False"/>
             </Border>
         </Grid>
 

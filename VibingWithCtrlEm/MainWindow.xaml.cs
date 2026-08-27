@@ -166,6 +166,9 @@ public partial class MainWindow : Window
     {
         _config = ConfigService.Load();
 
+        // ── Apply saved theme ────────────────────────────────
+        ApplyTheme(_config.DarkMode);
+
         // ── Bottom status: App version ────────────────────────
         var v = UpdateService.CurrentVersion;
         TxtAppVersion.Text = $"v{v.Major}.{v.Minor}.{v.Build}";
@@ -322,9 +325,9 @@ public partial class MainWindow : Window
     // Theme Toggle
     // ─────────────────────────────────────────────
 
-    private void BtnToggleTheme_Click(object sender, RoutedEventArgs e)
+    private void ApplyTheme(bool isDark)
     {
-        _isDarkMode = !_isDarkMode;
+        _isDarkMode = isDark;
 
         var themeUri = _isDarkMode
             ? new Uri("Themes/Dark.xaml",  UriKind.Relative)
@@ -335,6 +338,12 @@ public partial class MainWindow : Window
         Application.Current.Resources.MergedDictionaries.Add(newTheme);
 
         BtnToggleTheme.Content = _isDarkMode ? "☀  Light Mode" : "🌙  Dark Mode";
+    }
+
+    private void BtnToggleTheme_Click(object sender, RoutedEventArgs e)
+    {
+        ApplyTheme(!_isDarkMode);
+        _config.DarkMode = _isDarkMode;
     }
 
     // ─────────────────────────────────────────────
@@ -491,6 +500,10 @@ public partial class MainWindow : Window
     private async void ExitApplication()
     {
         _isExiting = true;
+
+        // Persist current theme mode to config.json
+        _config.DarkMode = _isDarkMode;
+        ConfigService.Save(_config);
 
         // 1. Stop log monitor immediately (cancels its background Task)
         _logMonitor.Dispose();

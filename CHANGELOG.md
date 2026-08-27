@@ -1,9 +1,10 @@
 ## [0.9.2] - 2026-08-26
 ### Added
 - Automatic update checking on startup from GitHub releases.
-- In-app update dialog showing version comparison, changelog, and live download progress.
-- Safe executable hot-swap replacement and automatic application restart.
-- `CheckForUpdates` configuration setting in `config.json` with automatic schema migration on startup.
+- Seamless executable hot-swap replacement and automatic application restart upon updating.
+- Theme persistence: `DarkMode` is now saved to `config.json` on exit and restored on startup.
+- `CheckForUpdates` configuration setting to toggle automatic update checks.
+- Automatic `config.json` schema migration to safely add new configuration options on startup without resetting custom settings.
 
 ## [0.9.1] - 2026-08-13
 ### Added

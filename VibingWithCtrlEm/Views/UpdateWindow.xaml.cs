@@ -24,9 +24,7 @@ public partial class UpdateWindow : Window
             ? updateInfo.TagName
             : $"v{updateInfo.TagName}";
 
-        TxtChangelog.Text = string.IsNullOrWhiteSpace(updateInfo.Changelog)
-            ? "No release notes provided for this version."
-            : updateInfo.Changelog.Trim();
+        ViewerChangelog.Document = MarkdownFlowDocumentBuilder.Build(updateInfo.Changelog);
     }
 
     private async void BtnUpdate_Click(object sender, RoutedEventArgs e)

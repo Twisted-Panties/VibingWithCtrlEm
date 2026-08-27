@@ -18,6 +18,9 @@ public class AppConfig
     /// <summary>Whether to automatically check for updates on startup.</summary>
     public bool CheckForUpdates { get; set; } = true;
 
+    /// <summary>Whether dark mode theme is enabled.</summary>
+    public bool DarkMode { get; set; } = false;
+
     /// <summary>Ordered list of command mappings loaded from config.</summary>
     public List<CommandMapping> Commands { get; set; } = [];
 }

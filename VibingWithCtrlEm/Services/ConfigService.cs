@@ -60,6 +60,13 @@ public static class ConfigService
                             {
                                 isMissingFields = true;
                             }
+
+                            if (!root.TryGetProperty("DarkMode", out _) &&
+                                !root.TryGetProperty("darkMode", out _) &&
+                                !root.TryGetProperty("dark_mode", out _))
+                            {
+                                isMissingFields = true;
+                            }
                         }
                     }
                     catch
@@ -123,6 +130,7 @@ public static class ConfigService
         return new AppConfig
         {
             CheckForUpdates = true,
+            DarkMode = false,
             IntifaceUrl = "ws://127.0.0.1:12345",
             LogFolderPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
