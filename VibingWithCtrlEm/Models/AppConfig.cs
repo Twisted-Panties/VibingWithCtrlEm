@@ -15,6 +15,9 @@ public class AppConfig
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             "CtrlEmClient", "Logs");
 
+    /// <summary>Whether to automatically check for updates on startup.</summary>
+    public bool CheckForUpdates { get; set; } = true;
+
     /// <summary>Ordered list of command mappings loaded from config.</summary>
     public List<CommandMapping> Commands { get; set; } = [];
 }

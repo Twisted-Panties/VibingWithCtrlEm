@@ -2,6 +2,7 @@ using System.IO;
 using System.Windows;
 using VibingWithCtrlEm.Models;
 using VibingWithCtrlEm.Services;
+using VibingWithCtrlEm.Views;
 // Disambiguate: both WPF and WinForms expose 'Application'.
 using Application = System.Windows.Application;
 
@@ -37,6 +38,9 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
+        // Clean up any leftover update temporary files / previous .old binary
+        UpdateService.CleanupOldVersion();
+
         // Window.Icon set here rather than in XAML to avoid a TypeConverter
         // exception that WPF throws when resolving ICO paths at parse time.
         try
@@ -49,6 +53,41 @@ public partial class MainWindow : Window
 
         InitialiseTrayIcon();
         LoadConfigAndPopulateUi();
+
+        Loaded += MainWindow_Loaded;
+    }
+
+    private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (_config.CheckForUpdates)
+        {
+            _ = CheckForUpdatesInBackgroundAsync();
+        }
+    }
+
+    private async Task CheckForUpdatesInBackgroundAsync()
+    {
+        try
+        {
+            // Brief pause so main window finishes layout rendering smoothly
+            await Task.Delay(1500);
+
+            if (_isExiting) return;
+
+            var updateInfo = await UpdateService.CheckForUpdateAsync();
+            if (updateInfo is not null && !_isExiting)
+            {
+                var updateWin = new UpdateWindow(updateInfo)
+                {
+                    Owner = this
+                };
+                updateWin.ShowDialog();
+            }
+        }
+        catch
+        {
+            // Background check failure should not disrupt the application
+        }
     }
 
     /// <summary>
@@ -126,6 +165,10 @@ public partial class MainWindow : Window
     private void LoadConfigAndPopulateUi()
     {
         _config = ConfigService.Load();
+
+        // ── Bottom status: App version ────────────────────────
+        var v = UpdateService.CurrentVersion;
+        TxtAppVersion.Text = $"v{v.Major}.{v.Minor}.{v.Build}";
 
         // ── Left panel: Intiface connection ──────────────────
         TxtIntifaceUrl.Text = _config.IntifaceUrl;

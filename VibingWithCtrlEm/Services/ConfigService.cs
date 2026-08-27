@@ -46,6 +46,32 @@ public static class ConfigService
                 var loaded = JsonSerializer.Deserialize<AppConfig>(json, JsonOptions);
                 if (loaded is not null)
                 {
+                    // Check if newly introduced fields (e.g. CheckForUpdates) are missing from disk
+                    bool isMissingFields = false;
+                    try
+                    {
+                        using var doc = JsonDocument.Parse(json);
+                        var root = doc.RootElement;
+                        if (root.ValueKind == JsonValueKind.Object)
+                        {
+                            if (!root.TryGetProperty("CheckForUpdates", out _) &&
+                                !root.TryGetProperty("checkForUpdates", out _) &&
+                                !root.TryGetProperty("check_for_updates", out _))
+                            {
+                                isMissingFields = true;
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        isMissingFields = true;
+                    }
+
+                    if (isMissingFields)
+                    {
+                        Save(loaded);
+                    }
+
                     return loaded;
                 }
             }
@@ -96,6 +122,7 @@ public static class ConfigService
 
         return new AppConfig
         {
+            CheckForUpdates = true,
             IntifaceUrl = "ws://127.0.0.1:12345",
             LogFolderPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),

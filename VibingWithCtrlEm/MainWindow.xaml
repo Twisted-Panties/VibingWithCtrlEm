@@ -384,8 +384,9 @@
                 </StackPanel>
 
                 <!-- Version label -->
-                <TextBlock Grid.Column="4"
-                           Text="v0.9.1"
+                <TextBlock x:Name="TxtAppVersion"
+                           Grid.Column="4"
+                           Text="v0.0.0"
                            Style="{DynamicResource VersionLabelStyle}"
                            VerticalAlignment="Center"/>
             </Grid>
