@@ -50,10 +50,18 @@
                                Style="{DynamicResource AppTitleStyle}"/>
                 </StackPanel>
 
-                <!-- Right side: theme toggle + tray hint -->
+                <!-- Right side: feedback + theme toggle -->
                 <StackPanel Grid.Column="1"
                             Orientation="Horizontal"
                             VerticalAlignment="Center">
+
+                    <!-- Feedback button -->
+                    <Button x:Name="BtnFeedback"
+                            Content="💬  Feedback"
+                            Style="{DynamicResource ThemeToggleButtonStyle}"
+                            Margin="0,0,8,0"
+                            Click="BtnFeedback_Click"
+                            ToolTip="Send feedback, suggestions, or report an issue"/>
 
                     <!-- Theme toggle button -->
                     <Button x:Name="BtnToggleTheme"

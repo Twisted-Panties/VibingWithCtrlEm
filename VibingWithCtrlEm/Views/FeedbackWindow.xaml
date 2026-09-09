@@ -1,0 +1,306 @@
+<Window x:Class="VibingWithCtrlEm.Views.FeedbackWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Feedback — Vibing With CtrlEm"
+        Width="580" Height="620"
+        MinWidth="520" MinHeight="540"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource BackgroundBrush}"
+        ResizeMode="CanResizeWithGrip">
+
+    <Window.Resources>
+        <!-- Custom rounded border TextBox template for the multiline feedback area -->
+        <Style x:Key="MultilineFeedbackTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="{DynamicResource InputBgBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource AccentTextBrush}"/>
+            <Setter Property="SelectionBrush" Value="{DynamicResource AccentSecondaryBrush}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Margin="8,6"
+                                          Focusable="False"
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Auto"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource InputBorderFocusBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ContactTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="{DynamicResource InputBgBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource AccentTextBrush}"/>
+            <Setter Property="SelectionBrush" Value="{DynamicResource AccentSecondaryBrush}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Margin="8,0"
+                                          VerticalAlignment="Center"
+                                          Focusable="False"
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource InputBorderFocusBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Header banner -->
+            <RowDefinition Height="Auto"/>
+            <!-- Body form -->
+            <RowDefinition Height="*"/>
+            <!-- Progress indicator -->
+            <RowDefinition Height="Auto"/>
+            <!-- Footer action buttons -->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ═══════════════════════════════════════════════
+             HEADER
+             ═══════════════════════════════════════════════ -->
+        <Border Grid.Row="0"
+                Background="{DynamicResource HeaderBrush}"
+                BorderBrush="{DynamicResource HeaderBorderBrush}"
+                BorderThickness="0,0,0,1"
+                Padding="20,16">
+            <StackPanel>
+                <!-- Title & Subtitle -->
+                <TextBlock Text="💬  Feedback &amp; Suggestions"
+                           FontFamily="Bahnschrift, Segoe UI"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource HeaderTextBrush}"/>
+
+                <TextBlock Text="Report issues, suggest features, or share how the app is working for you."
+                           FontFamily="Bahnschrift, Segoe UI"
+                           FontSize="11.5"
+                           Foreground="{DynamicResource SecondaryTextBrush}"
+                           Margin="0,4,0,12"/>
+
+                <!-- Quick Info Cards -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Card 1: Privacy -->
+                    <Border Grid.Column="0"
+                            Background="{DynamicResource PanelBrush}"
+                            BorderBrush="{DynamicResource PanelBorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="5"
+                            Padding="10,8">
+                        <StackPanel>
+                            <TextBlock Text="🔒 100% Private &amp; Anonymous"
+                                       FontFamily="Bahnschrift, Segoe UI"
+                                       FontSize="11.5"
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource AccentTextBrush}"/>
+                            <TextBlock Text="Sent directly to the developer. No identifying information is collected by default."
+                                       FontFamily="Segoe UI"
+                                       FontSize="10.5"
+                                       TextWrapping="Wrap"
+                                       Foreground="{DynamicResource MutedTextBrush}"
+                                       Margin="0,3,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Card 2: Contact -->
+                    <Border Grid.Column="2"
+                            Background="{DynamicResource PanelBrush}"
+                            BorderBrush="{DynamicResource PanelBorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="5"
+                            Padding="10,8">
+                        <StackPanel>
+                            <TextBlock Text="📬 Optional Reply"
+                                       FontFamily="Bahnschrift, Segoe UI"
+                                       FontSize="11.5"
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource AccentSecondaryBrush}"/>
+                            <TextBlock Text="Enter your Discord handle or email below if you'd like a response."
+                                       FontFamily="Segoe UI"
+                                       FontSize="10.5"
+                                       TextWrapping="Wrap"
+                                       Foreground="{DynamicResource MutedTextBrush}"
+                                       Margin="0,3,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- ═══════════════════════════════════════════════
+             BODY: Form fields
+             ═══════════════════════════════════════════════ -->
+        <ScrollViewer Grid.Row="1"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="20,14,20,10">
+
+                <!-- Category -->
+                <TextBlock Text="Category (optional)"
+                           FontFamily="Bahnschrift, Segoe UI"
+                           FontSize="11.5"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource PrimaryTextBrush}"
+                           Margin="0,0,0,4"/>
+
+                <ComboBox x:Name="CmbCategory"
+                          Style="{DynamicResource DeviceComboStyle}"
+                          Height="30"
+                          Margin="0,0,0,12">
+                    <ComboBoxItem Content="💡  Suggestion / Feature Request" Tag="Suggestion" IsSelected="True"/>
+                    <ComboBoxItem Content="🐛  Bug / Error Report" Tag="BugReport"/>
+                    <ComboBoxItem Content="⚠️  Complaint / Issue" Tag="Complaint"/>
+                    <ComboBoxItem Content="❤️  Positive Feedback / Praise" Tag="Praise"/>
+                    <ComboBoxItem Content="💬  General Feedback" Tag="General"/>
+                </ComboBox>
+
+                <!-- Feedback Text -->
+                <TextBlock Text="Your Feedback *"
+                           FontFamily="Bahnschrift, Segoe UI"
+                           FontSize="11.5"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource PrimaryTextBrush}"
+                           Margin="0,0,0,4"/>
+
+                <TextBox x:Name="TxtFeedback"
+                         Style="{StaticResource MultilineFeedbackTextBoxStyle}"
+                         Height="140"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         Margin="0,0,0,12"/>
+
+                <!-- Contact Details -->
+                <TextBlock Text="Discord Handle or Email (optional)"
+                           FontFamily="Bahnschrift, Segoe UI"
+                           FontSize="11.5"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource PrimaryTextBrush}"
+                           Margin="0,0,0,4"/>
+
+                <TextBox x:Name="TxtContact"
+                         Style="{StaticResource ContactTextBoxStyle}"
+                         Margin="0,0,0,12"/>
+
+                <!-- System Info Option -->
+                <CheckBox x:Name="ChkIncludeSystemInfo"
+                          IsChecked="True"
+                          Content="Include basic system info (App version, Windows OS version)"
+                          Foreground="{DynamicResource SecondaryTextBrush}"
+                          FontFamily="Bahnschrift, Segoe UI"
+                          FontSize="11"
+                          VerticalContentAlignment="Center"
+                          Margin="0,2,0,4"/>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- ═══════════════════════════════════════════════
+             PROGRESS BAR (shown during send)
+             ═══════════════════════════════════════════════ -->
+        <ProgressBar x:Name="ProgressBarSending"
+                     Grid.Row="2"
+                     IsIndeterminate="True"
+                     Height="3"
+                     BorderThickness="0"
+                     Background="Transparent"
+                     Foreground="{DynamicResource AccentSecondaryBrush}"
+                     Visibility="Collapsed"/>
+
+        <!-- ═══════════════════════════════════════════════
+             FOOTER: Status & Action buttons
+             ═══════════════════════════════════════════════ -->
+        <Border Grid.Row="3"
+                Background="{DynamicResource FooterBrush}"
+                BorderBrush="{DynamicResource HeaderBorderBrush}"
+                BorderThickness="0,1,0,0"
+                Padding="16,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Status / Error text -->
+                <TextBlock x:Name="TxtStatus"
+                           Grid.Column="0"
+                           Text=""
+                           VerticalAlignment="Center"
+                           Foreground="{DynamicResource StatusDisconnectedBrush}"
+                           FontFamily="Segoe UI"
+                           FontSize="11"
+                           TextWrapping="Wrap"
+                           Margin="0,0,12,0"/>
+
+                <!-- Cancel button -->
+                <Button x:Name="BtnCancel"
+                        Grid.Column="1"
+                        Content="Cancel"
+                        FontFamily="Bahnschrift, Segoe UI"
+                        Style="{DynamicResource SecondaryButtonStyle}"
+                        Width="85"
+                        Margin="0,0,10,0"
+                        Click="BtnCancel_Click"/>
+
+                <!-- Send button -->
+                <Button x:Name="BtnSend"
+                        Grid.Column="2"
+                        Content="Send Feedback"
+                        FontFamily="Bahnschrift, Segoe UI"
+                        Style="{DynamicResource PrimaryButtonStyle}"
+                        MinWidth="120"
+                        Click="BtnSend_Click"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

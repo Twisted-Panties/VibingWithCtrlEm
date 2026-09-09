@@ -346,6 +346,15 @@ public partial class MainWindow : Window
         _config.DarkMode = _isDarkMode;
     }
 
+    private void BtnFeedback_Click(object sender, RoutedEventArgs e)
+    {
+        var feedbackWindow = new FeedbackWindow
+        {
+            Owner = this
+        };
+        feedbackWindow.ShowDialog();
+    }
+
     // ─────────────────────────────────────────────
     // Intiface Connection Panel
     // ─────────────────────────────────────────────

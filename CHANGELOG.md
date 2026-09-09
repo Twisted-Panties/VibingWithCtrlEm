@@ -1,3 +1,10 @@
+## [0.9.3] - 2026-09-08
+### Added
+- In-app feedback dialog accessible via a new **💬 Feedback** button in the header bar.
+- Category selection (Suggestions, Bug Reports, Complaints, Praise, and General Feedback).
+- Optional contact field for Discord handle or email with anonymous submissions by default.
+- Option to include basic system details (app version and Windows OS) to assist with troubleshooting.
+
 ## [0.9.2] - 2026-08-26
 ### Added
 - Automatic update checking on startup from GitHub releases.
