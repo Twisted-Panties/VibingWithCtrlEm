@@ -74,6 +74,18 @@ public static class ConfigService
                         isMissingFields = true;
                     }
 
+                    // Non-destructively add 'liveView' to existing configs if missing
+                    if (!loaded.Commands.Any(c => string.Equals(c.Keyword, "liveView", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        loaded.Commands.Add(new CommandMapping
+                        {
+                            Keyword = "liveView",
+                            Intensity = 0.75,
+                            DurationMs = 1500
+                        });
+                        isMissingFields = true;
+                    }
+
                     if (isMissingFields)
                     {
                         Save(loaded);
@@ -138,6 +150,7 @@ public static class ConfigService
             Commands =
             [
                 new CommandMapping { Keyword = "changeWallpaper", Intensity = 0.50,  DurationMs = 750 },
+                new CommandMapping { Keyword = "liveView",        Intensity = 0.75,  DurationMs = 1500 },
                 new CommandMapping { Keyword = "lockinput",       Intensity = 0.90,  DurationMs = 1000 },
                 new CommandMapping { Keyword = "openPage",        Intensity = 0.40,  DurationMs = 500 },
                 new CommandMapping { Keyword = "openshock",       Intensity = 0.65,  DurationMs = 1000 },

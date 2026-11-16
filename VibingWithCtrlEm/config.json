@@ -8,6 +8,11 @@
       "DurationMs": 750
     },
     {
+      "Keyword": "liveView",
+      "Intensity": 0.75,
+      "DurationMs": 1500
+    },
+    {
       "Keyword": "lockinput",
       "Intensity": 0.9,
       "DurationMs": 1000

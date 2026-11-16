@@ -1,3 +1,8 @@
+## [1.0.0] - 2026-11-15
+### Added
+- Added support for the new CtrlEm `liveView` command (defaults to 75% intensity for 1500 ms).
+- Automatic configuration migration that non-destructively adds `liveView` to existing user configuration files without modifying custom settings.
+
 ## [0.9.3] - 2026-09-08
 ### Added
 - In-app feedback dialog accessible via a new **💬 Feedback** button in the header bar.

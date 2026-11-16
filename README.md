@@ -156,6 +156,7 @@ The following mappings ship as defaults and reflect common CtrlEm event types:
 | Keyword | Intensity | Duration |
 |---|---|---|
 | `changeWallpaper` | 0.50 | 750 ms |
+| `liveView` | 0.75 | 1500 ms |
 | `lockinput` | 0.90 | 1000 ms |
 | `openPage` | 0.40 | 500 ms |
 | `openshock` | 0.65 | 1000 ms |
@@ -253,7 +254,7 @@ Vibing With CtrlEm operates entirely on your local machine:
 ---
 ## Contact
 
-Questions, feedback, or just want to chat? Find me on Discord: **TwistedPanties**
+Questions, feedback, or bug reports? Use the in-app **💬 Feedback** button on the main window, or find me on Discord: **TwistedPanties**
 
 ---
 
